@@ -7,7 +7,7 @@ import { PublicKey } from '@solana/web3.js';
 import { AppContext, AppProps as NextAppProps, default as NextApp } from 'next/app';
 import { AppInitialProps } from 'next/dist/shared/lib/utils';
 import { FC, useMemo } from 'react';
-import { DEVNET_ENDPOINT } from '../../utils/constants';
+//import { DEVNET_ENDPOINT } from '../../utils/constants';
 import { ConfigProvider } from '../contexts/ConfigProvider';
 import { FullscreenProvider } from '../contexts/FullscreenProvider';
 import { PaymentProvider } from '../contexts/PaymentProvider';
@@ -16,6 +16,9 @@ import { TransactionsProvider } from '../contexts/TransactionsProvider';
 import { SolanaPayLogo } from '../images/SolanaPayLogo';
 import { SOLIcon } from '../images/SOLIcon';
 import css from './App.module.css';
+//import the following 2 lines to accept USDC on Mainnet
+import { MAINNET_ENDPOINT, MAINNET_USDC_MINT } from '../../utils/constants';
+import { USDCIcon } from '../images/USDCIcon';
 
 interface AppProps extends NextAppProps {
     host: string;
@@ -56,11 +59,28 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
         }
     }
 
+ //devnet original values below
+    //<ConnectionProvider endpoint={DEVNET_ENDPOINT}>
+    //message={message}                                
+    //symbol="SOL"
+    //icon={<SOLIcon />}
+    //decimals={9}
+    //minDecimals={1}
+
+    //mainnet values
+    //<ConnectionProvider endpoint={MAINNET_ENDPOINT}>
+    //splToken={MAINNET_USDC_MINT}
+    //message={message}                              
+    //symbol="USDC"
+    //icon={<USDCIcon />}
+    //decimals={6}
+    //minDecimals={2}
+    
     return (
         <ThemeProvider>
             <FullscreenProvider>
                 {recipient && label ? (
-                    <ConnectionProvider endpoint={DEVNET_ENDPOINT}>
+                    <ConnectionProvider endpoint={MAINNET_ENDPOINT}>
                         <WalletProvider wallets={wallets} autoConnect={connectWallet}>
                             <WalletModalProvider>
                                 <ConfigProvider
@@ -68,11 +88,12 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
                                     link={link}
                                     recipient={recipient}
                                     label={label}
+                                    splToken={MAINNET_USDC_MINT}
                                     message={message}
-                                    symbol="SOL"
-                                    icon={<SOLIcon />}
-                                    decimals={9}
-                                    minDecimals={1}
+                                    symbol="USDC"
+                                    icon={<USDCIcon />}
+                                    decimals={6}
+                                    minDecimals={2}
                                     connectWallet={connectWallet}
                                 >
                                     <TransactionsProvider>
